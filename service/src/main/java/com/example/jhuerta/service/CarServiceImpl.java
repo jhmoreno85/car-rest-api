@@ -9,10 +9,13 @@ import com.example.jhuerta.dao.CarDao;
 import com.example.jhuerta.dto.CarDto;
 import com.example.jhuerta.service.ks.StreamService;
 
+import lombok.extern.slf4j.Slf4j;
+
 import javax.inject.Inject;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class CarServiceImpl implements CarService {
 
     private final CarDao carDao;
@@ -30,7 +33,6 @@ public class CarServiceImpl implements CarService {
         if (null == carDto) {
             throw new NotFoundException("car not found");
         }
-        streamService.publish(carDto.getId() + " " + carDto.getBrand() + " " + carDto.getModel());
         return Car.builder()
                 .id(carDto.getId())
                 .brand(carDto.getBrand())
@@ -69,9 +71,12 @@ public class CarServiceImpl implements CarService {
                     .model(car.getModel())
                     .color(car.getColor().name())
                     .build());
+            streamService.publish(carDto.toString());
         } catch (IllegalArgumentException e) {
+            log.error("An error has occurred", e);
             throw new BadRequestException(e.getMessage());
         } catch (Exception e) {
+            log.error("An error has occurred", e);
             throw new InternalServerException(e.getMessage());
         }
         car.setId(carDto.getId());
@@ -90,9 +95,12 @@ public class CarServiceImpl implements CarService {
                     .model(car.getModel())
                     .color(car.getColor().name())
                     .build());
+            streamService.publish(car.toString());
         } catch (IllegalArgumentException e) {
+            log.error("An error has occurred", e);
             throw new BadRequestException(e.getMessage());
         } catch (Exception e) {
+            log.error("An error has occurred", e);
             throw new InternalServerException(e.getMessage());
         }
     }
