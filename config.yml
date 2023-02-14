@@ -9,8 +9,8 @@ mySQLConfiguration:
     driverClass: com.mysql.jdbc.Driver
     minSize: 1
     maxSize: 40
-    user: "app_user"
-    password: "My_Password_123"
+    user: "change-it"
+    password: "change-it"
     properties:
       charSet: "UTF-8"
     maxWaitForConnection: 1s
