@@ -1,6 +1,5 @@
 package com.example.jhuerta.service;
 
-import com.example.jhuerta.api.exception.BadRequestException;
 import com.example.jhuerta.api.exception.InternalServerException;
 import com.example.jhuerta.api.exception.NotFoundException;
 import com.example.jhuerta.api.model.ColorType;
@@ -12,11 +11,14 @@ import com.example.jhuerta.service.ks.StreamService;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.inject.Inject;
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
 public class CarServiceImpl implements CarService {
+
+    private static final int MIN_YEAR = 1900;
 
     private final CarDao carDao;
     private final StreamService streamService;
@@ -61,9 +63,9 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public Car add(Car car) {
-        CarDto carDto;
+        validate(car);
         try {
-            carDto = carDao.save(CarDto.builder()
+            CarDto carDto = carDao.save(CarDto.builder()
                     .brand(car.getBrand())
                     .plates(car.getPlates())
                     .vin(car.getVin())
@@ -71,20 +73,18 @@ public class CarServiceImpl implements CarService {
                     .model(car.getModel())
                     .color(car.getColor().name())
                     .build());
-            streamService.publish(carDto.toString());
-        } catch (IllegalArgumentException e) {
-            log.error("An error has occurred", e);
-            throw new BadRequestException(e.getMessage());
+            car.setId(carDto.getId());
+            streamService.publish(car.toString());
         } catch (Exception e) {
             log.error("An error has occurred", e);
             throw new InternalServerException(e.getMessage());
         }
-        car.setId(carDto.getId());
         return car;
     }
 
     @Override
     public void update(int id, Car car) {
+        validate(car);
         try {
             carDao.update(CarDto.builder()
                     .id(id)
@@ -96,9 +96,6 @@ public class CarServiceImpl implements CarService {
                     .color(car.getColor().name())
                     .build());
             streamService.publish(car.toString());
-        } catch (IllegalArgumentException e) {
-            log.error("An error has occurred", e);
-            throw new BadRequestException(e.getMessage());
         } catch (Exception e) {
             log.error("An error has occurred", e);
             throw new InternalServerException(e.getMessage());
@@ -108,5 +105,22 @@ public class CarServiceImpl implements CarService {
     @Override
     public void delete(int id) {
         carDao.delete(id);
+    }
+
+    private void validate(Car car) {
+        int currYear = Calendar.getInstance().get(Calendar.YEAR) + 1;
+        if (null == car) {
+            throw new IllegalArgumentException("Car object must be not null");
+        } else if (null == car.getBrand() || car.getBrand().isEmpty()) {
+            throw new IllegalArgumentException("Car brand must be not null/empty");
+        } else if (null == car.getModel() || car.getModel().isEmpty()) {
+            throw new IllegalArgumentException("Car model must be not null/empty");
+        } else if (null == car.getVin() || car.getVin().isEmpty()) {
+            throw new IllegalArgumentException("Car VIN must be not null/empty");
+        } else if (null == car.getColor()) {
+            throw new IllegalArgumentException("Car color must be not null/empty");
+        } else if (null == car.getYear() || MIN_YEAR > car.getYear() || currYear < car.getYear()) {
+            throw new IllegalArgumentException("Car year must be not null, or must be between " + MIN_YEAR + " and " + currYear);
+        }
     }
 }

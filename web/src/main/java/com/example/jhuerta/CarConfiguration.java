@@ -8,8 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import org.pac4j.dropwizard.Pac4jFactory;
-
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -19,7 +17,4 @@ public class CarConfiguration extends Configuration {
 
     @NotNull
     private MySQLConfiguration mySQLConfiguration;
-
-    @NotNull
-    Pac4jFactory pac4j = new Pac4jFactory();
 }

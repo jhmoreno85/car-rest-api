@@ -21,9 +21,6 @@ import org.apache.ibatis.session.SqlSessionManager;
 
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 
-import org.pac4j.dropwizard.Pac4jBundle;
-import org.pac4j.dropwizard.Pac4jFactory;
-
 import javax.inject.Singleton;
 
 public class CarApplication extends Application<CarConfiguration> {
@@ -32,13 +29,6 @@ public class CarApplication extends Application<CarConfiguration> {
     private static final String DB_SESSION = "db-session";
     private static final String MY_BATIS_ENVIRONMENT_NAME = "local";
     private static final String SQL_MAP_CONFIG_RESOURCE = "SqlMapConfig.xml";
-
-    final Pac4jBundle<CarConfiguration> pac4jBundle = new Pac4jBundle<>() {
-        @Override
-        public Pac4jFactory getPac4jFactory(CarConfiguration configuration) {
-            return configuration.getPac4j();
-        }
-    };
 
     public static void main(final String[] args) throws Exception {
         new CarApplication().run(args);
@@ -54,7 +44,6 @@ public class CarApplication extends Application<CarConfiguration> {
         bootstrap.getObjectMapper()
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        bootstrap.addBundle(pac4jBundle);
     }
 
     @Override

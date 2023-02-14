@@ -11,6 +11,7 @@ import java.util.Properties;
 @Slf4j
 public class KafkaStreamService implements StreamService {
 
+    private static final String CLUSTER = "localhost:9092";
     private static final String TOPIC_NAME = "cars-topic";
     private static final String KAFKA_CLUSTER_ENV_VAR_NAME = "KAFKA_CLUSTER";
     private final KafkaProducer<String, String> kafkaProducer;
@@ -19,8 +20,7 @@ public class KafkaStreamService implements StreamService {
         log.info("Kafka Producer running in thread {}", Thread.currentThread().getName());
         Properties kafkaProps = new Properties();
 
-        String defaultClusterValue = "localhost:9092";
-        String kafkaCluster = System.getProperty(KAFKA_CLUSTER_ENV_VAR_NAME, defaultClusterValue);
+        String kafkaCluster = System.getProperty(KAFKA_CLUSTER_ENV_VAR_NAME, CLUSTER);
         log.info("Kafka cluster {}", kafkaCluster);
 
         kafkaProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaCluster);
@@ -37,7 +37,7 @@ public class KafkaStreamService implements StreamService {
             if (null != ex) {
                 log.error("Error sending message with key", ex);
             } else {
-                log.error("Message has been published successful");
+                log.info("Message has been published successful");
             }
         });
     }

@@ -8,8 +8,6 @@ import com.example.jhuerta.service.CarService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.pac4j.jax.rs.annotations.Pac4JSecurity;
-
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -34,7 +32,6 @@ public class CarV1Resource {
     @GET
     @Path("/{id}")
     @Timed
-    @Pac4JSecurity(clients = "api-auth")
     public Response get(@PathParam("id") Integer id) {
         Car result = carService.get(id);
         return Response.ok()
@@ -45,7 +42,6 @@ public class CarV1Resource {
     @GET
     @Path("")
     @Timed
-    @Pac4JSecurity(clients = "api-auth")
     public Response getAll() {
         List<Car> result = carService.getAll();
         return Response.ok()
@@ -57,7 +53,6 @@ public class CarV1Resource {
     @Path("")
     @Consumes(MediaType.APPLICATION_JSON)
     @Timed
-    @Pac4JSecurity(clients = "api-auth")
     public Response add(Car car) {
         Car result = carService.add(car);
         return Response.ok()
@@ -69,7 +64,6 @@ public class CarV1Resource {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Timed
-    @Pac4JSecurity(clients = "api-auth")
     public Response update(@PathParam("id") Integer id, Car car) {
         carService.update(id, car);
         return Response.noContent()
@@ -80,7 +74,6 @@ public class CarV1Resource {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Timed
-    @Pac4JSecurity(clients = "api-auth")
     public Response delete(@PathParam("id") Integer id) {
         carService.delete(id);
         return Response.noContent()
