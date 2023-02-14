@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE mapper PUBLIC '-//mybatis.org//DTD Mapper 3.0//EN' 'http://mybatis.org/dtd/mybatis-3-mapper.dtd'>
+<mapper namespace='com.example.jhuerta.mapper.CarMapper'>
+    <resultMap id='carMap' type='com.example.jhuerta.dto.CarDto'>
+        <id property='id' column='id'/>
+        <result property='brand' column='brand'/>
+        <result property='model' column='model'/>
+        <result property='plates' column='plates'/>
+        <result property='vin' column='vin'/>
+        <result property='color' column='color'/>
+        <result property='year' column='year'/>
+    </resultMap>
+
+    <select id='findById' resultMap='carMap'>
+        SELECT * FROM CAR WHERE id = #{id}
+    </select>
+
+    <select id='findAll' resultMap='carMap'>
+        SELECT * FROM CAR
+    </select>
+
+    <insert id='add' useGeneratedKeys='true' keyProperty='id' parameterType='com.example.jhuerta.dto.CarDto'>
+        INSERT INTO CAR (brand, model, plates, vin, color, year)
+        VALUES (#{brand}, #{model}, #{plates}, #{vin}, #{color}, #{year})
+    </insert>
+
+    <update id='update' parameterType='com.example.jhuerta.dto.CarDto'>
+        UPDATE CAR
+        SET brand = #{brand},
+            model = #{model},
+            plates = #{plates},
+            vin = #{vin},
+            color = #{color},
+            year = #{year}
+        WHERE
+            id = #{id}
+    </update>
+
+    <delete id='delete'>
+        DELETE FROM CAR WHERE id = #{id}
+    </delete>
+</mapper>

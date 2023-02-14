@@ -1,0 +1,31 @@
+logging:
+  level: INFO
+  loggers:
+    com.example.jhuerta: DEBUG
+
+mySQLConfiguration:
+  database:
+    url: "jdbc:mysql://localhost:3306/db"
+    driverClass: com.mysql.jdbc.Driver
+    minSize: 1
+    maxSize: 40
+    user: "change-it"
+    password: "change-it"
+    properties:
+      charSet: "UTF-8"
+    maxWaitForConnection: 1s
+    checkConnectionWhileIdle: true
+    checkConnectionOnBorrow: true
+    evictionInterval: 10s
+    minIdleTime: 1 minute
+
+pac4j:
+  securityLogic:
+    class: org.pac4j.core.engine.DefaultSecurityLogic
+  clients:
+    - org.pac4j.http.client.direct.HeaderClient:
+        name: "api-auth"
+        headerName: "Authorization"
+        prefixHeader: "Bearer "
+        authenticator:
+          class: com.example.jhuerta.security.ApiAuthAuthenticator
