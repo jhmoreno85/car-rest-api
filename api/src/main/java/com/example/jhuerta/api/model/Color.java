@@ -1,6 +1,6 @@
 package com.example.jhuerta.api.model;
 
-public enum ColorType {
+public enum Color {
     RED,
     BLUE,
     BLACK,

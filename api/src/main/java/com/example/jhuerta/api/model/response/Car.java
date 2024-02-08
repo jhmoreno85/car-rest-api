@@ -1,6 +1,7 @@
 package com.example.jhuerta.api.model.response;
 
-import com.example.jhuerta.api.model.ColorType;
+import com.example.jhuerta.api.model.Brand;
+import com.example.jhuerta.api.model.Color;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,10 +14,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Car {
     private Integer id;
-    private String brand;
+    private Brand brand;
     private String model;
     private String plates;
     private String vin;
-    private ColorType color;
+    private Color color;
     private Integer year;
 }

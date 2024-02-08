@@ -2,7 +2,8 @@ package com.example.jhuerta.service;
 
 import com.example.jhuerta.api.exception.InternalServerException;
 import com.example.jhuerta.api.exception.NotFoundException;
-import com.example.jhuerta.api.model.ColorType;
+import com.example.jhuerta.api.model.Brand;
+import com.example.jhuerta.api.model.Color;
 import com.example.jhuerta.api.model.response.Car;
 import com.example.jhuerta.dao.CarDao;
 import com.example.jhuerta.dto.CarDto;
@@ -37,12 +38,12 @@ public class CarServiceImpl implements CarService {
         }
         return Car.builder()
                 .id(carDto.getId())
-                .brand(carDto.getBrand())
+                .brand(Brand.valueOf(carDto.getBrand()))
                 .model(carDto.getModel())
                 .plates(carDto.getPlates())
                 .vin(carDto.getVin())
                 .year(carDto.getYear())
-                .color(ColorType.valueOf(carDto.getColor()))
+                .color(Color.valueOf(carDto.getColor()))
                 .build();
     }
 
@@ -51,12 +52,12 @@ public class CarServiceImpl implements CarService {
         return carDao.findAll().stream()
                 .map(carDto -> Car.builder()
                         .id(carDto.getId())
-                        .brand(carDto.getBrand())
+                        .brand(Brand.valueOf(carDto.getBrand()))
                         .model(carDto.getModel())
                         .plates(carDto.getPlates())
                         .vin(carDto.getVin())
                         .year(carDto.getYear())
-                        .color(ColorType.valueOf(carDto.getColor()))
+                        .color(Color.valueOf(carDto.getColor()))
                         .build())
                 .collect(Collectors.toList());
     }
@@ -66,7 +67,7 @@ public class CarServiceImpl implements CarService {
         validate(car);
         try {
             CarDto carDto = carDao.save(CarDto.builder()
-                    .brand(car.getBrand())
+                    .brand(car.getBrand().name())
                     .plates(car.getPlates())
                     .vin(car.getVin())
                     .year(car.getYear())
@@ -88,7 +89,7 @@ public class CarServiceImpl implements CarService {
         try {
             carDao.update(CarDto.builder()
                     .id(id)
-                    .brand(car.getBrand())
+                    .brand(car.getBrand().name())
                     .plates(car.getPlates())
                     .vin(car.getVin())
                     .year(car.getYear())
@@ -111,14 +112,14 @@ public class CarServiceImpl implements CarService {
         int currYear = Calendar.getInstance().get(Calendar.YEAR) + 1;
         if (null == car) {
             throw new IllegalArgumentException("Car object must be not null");
-        } else if (null == car.getBrand() || car.getBrand().isEmpty()) {
-            throw new IllegalArgumentException("Car brand must be not null/empty");
+        } else if (null == car.getBrand()) {
+            throw new IllegalArgumentException("Car brand must be not null");
         } else if (null == car.getModel() || car.getModel().isEmpty()) {
             throw new IllegalArgumentException("Car model must be not null/empty");
         } else if (null == car.getVin() || car.getVin().isEmpty()) {
             throw new IllegalArgumentException("Car VIN must be not null/empty");
         } else if (null == car.getColor()) {
-            throw new IllegalArgumentException("Car color must be not null/empty");
+            throw new IllegalArgumentException("Car color must be not null");
         } else if (null == car.getYear() || MIN_YEAR > car.getYear() || currYear < car.getYear()) {
             throw new IllegalArgumentException("Car year must be not null, or must be between " + MIN_YEAR + " and " + currYear);
         }
