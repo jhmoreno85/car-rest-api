@@ -25,7 +25,7 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 @Slf4j
 @AllArgsConstructor(onConstructor = @__(@Inject))
-public class CarV1Resource {
+public class CarResourceV1 {
 
     private final CarService carService;
 

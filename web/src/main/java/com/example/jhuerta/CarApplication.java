@@ -5,7 +5,7 @@ import com.example.jhuerta.service.CarService;
 import com.example.jhuerta.dao.CarDao;
 import com.example.jhuerta.dao.CarDaoImpl;
 import com.example.jhuerta.factory.MyBatisFactory;
-import com.example.jhuerta.resources.CarV1Resource;
+import com.example.jhuerta.resources.CarResourceV1;
 import com.example.jhuerta.service.CarServiceImpl;
 import com.example.jhuerta.service.ks.KafkaStreamService;
 import com.example.jhuerta.service.ks.StreamService;
@@ -64,6 +64,6 @@ public class CarApplication extends Application<CarConfiguration> {
                 bind(CarServiceImpl.class).to(CarService.class).in(Singleton.class);
             }
         });
-        environment.jersey().register(CarV1Resource.class);
+        environment.jersey().register(CarResourceV1.class);
     }
 }
